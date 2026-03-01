@@ -1,0 +1,987 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kishor Madane | 3D Portfolio</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0D0D0D',
+                        primary: '#FF1E1E',
+                        'primary-dark': '#990000',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Vanilla Tilt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Prism.js for code syntax highlighting on the monitor screen -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+
+    <style>
+        :root {
+            --primary: #FF1E1E;
+            --bg: #0D0D0D;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #ffffff;
+            overflow-x: hidden;
+            cursor: none; /* Custom cursor */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #330000;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.2s, height 0.2s;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 30, 30, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+            transition-timing-function: ease-out;
+        }
+        body:hover .cursor-outline { border-color: var(--primary); }
+        .hover-target:hover ~ .cursor-outline {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 30, 30, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* Glassmorphism & Neon */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 30, 30, 0.5);
+            box-shadow: 0 0 20px rgba(255, 30, 30, 0.15), inset 0 0 10px rgba(255, 30, 30, 0.05);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px rgba(255, 30, 30, 0.4), 0 0 20px rgba(255, 30, 30, 0.2);
+        }
+        .neon-border {
+            position: relative;
+        }
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(45deg, transparent, var(--primary), transparent);
+            z-index: -1;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .neon-border:hover::before {
+            opacity: 1;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(90deg, #FF1E1E, #990000);
+            box-shadow: 0 0 15px rgba(255, 30, 30, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 25px rgba(255, 30, 30, 0.7);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 30, 30, 0.2) inset;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-outline::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,30,30,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        .btn-outline:hover::before {
+            left: 100%;
+        }
+        .btn-outline:hover {
+            box-shadow: 0 0 20px rgba(255, 30, 30, 0.5) inset, 0 0 15px rgba(255, 30, 30, 0.4);
+            text-shadow: 0 0 8px rgba(255, 30, 30, 0.8);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, .font-heading { font-family: 'Poppins', sans-serif; }
+        
+        /* Particle Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* 3D Canvas Container */
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            position: relative;
+        }
+
+        /* CSS 3D Computer Scene (from premium 3D computer snippet) */
+        .scene {
+            width: 380px;
+            height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(-28deg) translateZ(80px);
+            transition: transform 0.8s ease;
+            margin: 0 auto;
+        }
+
+        .scene:hover { transform: rotateX(22deg) rotateY(-34deg) translateZ(140px) scale(1.04); }
+
+        .computer { position: absolute; transform-style: preserve-3d; }
+
+        /* Monitor */
+        .monitor { width: 340px; height: 220px; position: absolute; top: 0; left: 20px; transform: translateZ(60px); }
+        .monitor-frame {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a1a1a, #111);
+            border: 12px solid #c00; border-radius: 18px; position: relative; overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(200,0,0,0.15), 0 0 40px rgba(200,0,0,0.25);
+        }
+        .monitor-screen { position: absolute; inset: 12px; background: #000; border-radius: 6px; overflow: hidden; box-shadow: inset 0 0 60px rgba(200,0,0,0.18); }
+        .monitor-screen .screen-code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.45;
+            color: #c7f9e6;
+            padding: 12px;
+            height: 100%;
+            box-sizing: border-box;
+            overflow: auto;
+            white-space: pre;
+            background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));
+        }
+        .monitor-screen .screen-code code { display: block; }
+        .glare { position: absolute; width: 180%; height: 300%; background: linear-gradient(135deg, transparent 38%, rgba(255,60,60,0.12) 45%, rgba(255,100,100,0.08) 50%, transparent 58%); top: -80%; left: -40%; transform: rotate(35deg); pointer-events: none; }
+
+        /* Stand */
+        .stand { width: 160px; height: 90px; background: #111; position: absolute; top: 210px; left: 110px; transform: translateZ(20px); border-radius: 12px 12px 30px 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+        .stand::before { content: ""; position: absolute; width: 100%; height: 18px; background: #c00; bottom: 0; border-radius: 0 0 30px 30px; box-shadow: 0 8px 20px rgba(200,0,0,0.4); }
+
+        /* Keyboard */
+        .keyboard { width: 320px; height: 110px; background: linear-gradient(to bottom, #1a1a1a, #111); position: absolute; top: 280px; left: 30px; border-radius: 14px; transform: translateZ(8px) rotateX(-78deg); box-shadow: 0 40px 80px rgba(0,0,0,0.95), inset 0 6px 20px rgba(200,0,0,0.12); border: 2px solid #900; }
+        .keys { display: grid; grid-template-columns: repeat(15, 1fr); grid-gap: 5px; padding: 14px 16px; height: 100%; }
+        .key { background: #0d0d0d; border: 1px solid #400; border-radius: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 2px 6px rgba(200,0,0,0.15); }
+        .key.red { background: #a00; border-color: #c00; box-shadow: inset 0 2px 5px rgba(0,0,0,0.7), 0 3px 12px rgba(200,0,0,0.45); }
+
+        /* Mouse */
+        .mouse { width: 60px; height: 110px; background: linear-gradient(to right, #111, #1a1a1a); position: absolute; top: 340px; right: -20px; border-radius: 40px 40px 20px 20px; transform: translateZ(30px) rotateY(15deg); box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 4px 12px rgba(200,0,0,0.2); border: 2px solid #b00; }
+        .mouse::after { content: ""; position: absolute; width: 24px; height: 24px; background: #c00; border-radius: 50%; top: 28px; left: 18px; box-shadow: 0 0 20px rgba(200,0,0,0.6); }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            top: 0; bottom: 0; left: 50%;
+            margin-left: -1px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background: inherit;
+            width: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: -8px;
+            background-color: var(--bg);
+            border: 3px solid var(--primary);
+            top: 24px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 10px var(--primary);
+            transition: all 0.3s;
+        }
+        .timeline-item:hover::after {
+            background-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+        }
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after { left: -8px; }
+        @media screen and (max-width: 768px) {
+            .timeline-container::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item::after { left: 23px; }
+            .right { left: 0; }
+        }
+
+        /* 3D Flip Card */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 300px;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Floating Animation */
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Inputs */
+        input, textarea {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 30, 30, 0.2);
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-card border-none border-b border-white/10" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 hover-target">
+                    <a href="#home" class="font-heading font-bold text-2xl tracking-wider flex items-center gap-2">
+                        <img src="image.jpeg" alt="Logo" class="w-12 h-12 rounded-full object-cover">
+                        <span class="text-primary neon-text">.</span>
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover-target text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="#about" class="hover-target text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="#projects" class="hover-target text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                        <a href="#skills" class="hover-target text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Skills</a>
+                        <a href="#contact" class="hover-target text-gray-300 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center hover-target">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark/95 backdrop-blur-md border-b border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-primary">Home</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-primary">About</a>
+                <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-primary">Projects</a>
+                <a href="#skills" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-primary">Skills</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-primary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Radial Gradient Overlay -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-dark to-dark pointer-events-none z-[-1]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 gap-12 items-center relative z-10">
+            
+            <div class="text-left reveal active">
+                <p class="text-primary font-medium tracking-widest uppercase mb-4 text-sm flex items-center gap-2">
+                    <span class="w-8 h-[1px] bg-primary"></span> Welcome to my portfolio
+                </p>
+                <h1 class="text-5xl md:text-7xl font-bold font-heading mb-4 leading-tight">
+                    Hi, I'm <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Kishor Madane</span>
+                </h1>
+                <h2 class="text-2xl md:text-3xl font-semibold text-gray-300 mb-6 flex items-center gap-2">
+                    <span id="typewriter" class="neon-text text-primary"></span>
+                    <span class="w-1 h-8 bg-primary animate-pulse inline-block"></span>
+                </h2>
+                <p class="text-gray-400 text-lg mb-8 max-w-lg leading-relaxed border-l-2 border-primary/50 pl-4 italic">
+                    "Building Intelligent Systems with Code & Innovation"
+                </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <a href="#projects" class="hover-target btn-primary text-white px-8 py-3 rounded-full font-medium flex items-center gap-2 group">
+                        View Projects
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="#" class="hover-target btn-outline px-8 py-3 rounded-full font-medium flex items-center gap-2">
+                        Download Resume
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    </a>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="flex gap-6 mt-12 items-center">
+                    <span class="text-sm text-gray-500 uppercase tracking-wider">Connect:</span>
+                    <a href="https://www.linkedin.com/in/kishor-madane-248139260/" target="_blank" class="hover-target text-gray-400 hover:text-primary transition-colors transform hover:scale-110">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <a href="https://github.com/kishor047" target="_blank" class="hover-target text-gray-400 hover:text-primary transition-colors transform hover:scale-110">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3D Canvas (CSS 3D Computer) -->
+            <div id="canvas-container" class="hidden lg:block reveal">
+                <div class="scene">
+                    <div class="computer">
+                        <!-- MONITOR -->
+                        <div class="monitor">
+                            <div class="monitor-frame">
+                                <div class="monitor-screen">
+                                    <pre class="screen-code"><code class="language-python"># Simple data analysis
+import numpy as np
+
+def analyze(data):
+    """Return mean and std deviation of a numeric list."""
+    arr = np.array(data)
+    return np.mean(arr), np.std(arr)
+
+if __name__ == '__main__':
+    sample = [12, 7, 22, 5, 18]
+    mean, std = analyze(sample)
+    print(f"Mean: {mean:.2f}  Std: {std:.2f}")</code></pre>
+                                    <div class="glare"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STAND -->
+                        <div class="stand"></div>
+
+                        <!-- KEYBOARD -->
+                        <div class="keyboard">
+                            <div class="keys">
+                                <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key red"></div><div class="key red"></div>
+                                <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key red"></div><div class="key red"></div>
+                                <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key red"></div><div class="key red"></div>
+                            </div>
+                        </div>
+
+                        <!-- MOUSE -->
+                        <div class="mouse"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">About <span class="text-primary neon-text">Me</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 md:p-12 reveal">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="w-full md:w-2/5 flex justify-center">
+                        <div class="w-80 h-80 rounded-full border-4 border-primary/30 p-2 relative group overflow-hidden">
+                            <!-- Profile Image -->
+                            <img src="image.jpeg" alt="Profile" class="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 rounded-full box-shadow-[0_0_20px_rgba(255,30,30,0.5)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-3/5">
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Software Developer & IT Student</h3>
+                        <p class="text-gray-400 leading-relaxed mb-6">
+                            I am a passionate <span class="text-white font-medium">Software Developer</span> and IT Engineering student at Vidyavardhini’s College of Engineering and Technology. I specialize in <span class="text-primary">Python, Machine Learning, AI Systems, Full Stack Development, and Deep Learning</span>.
+                        </p>
+                        <p class="text-gray-400 leading-relaxed">
+                            My goal is to leverage technology to build intelligent, scalable, and impactful solutions. Whether it's crafting a responsive web interface or designing complex predictive models, I thrive on challenges and continuous learning.
+                        </p>
+                        
+                        <!-- Mini Info -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 pt-6 border-t border-white/10">
+                            <div>
+                                <span class="block text-sm text-gray-500">Email</span>
+                                <a href="mailto:kishormadane4747@gmail.com" class="hover-target text-white hover:text-primary transition-colors">kishormadane4747@gmail.com</a>
+                            </div>
+                            <div>
+                                <span class="block text-sm text-gray-500">Phone</span>
+                                <span class="text-white">74-4776-5404</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Timeline Section -->
+    <section id="education" class="py-20 relative bg-dark/50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">My <span class="text-primary neon-text">Education</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+
+            <div class="timeline-container reveal">
+                <!-- Item 1 -->
+                <div class="timeline-item left">
+                    <div class="glass-card p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-primary text-sm font-bold mb-2 tracking-wider">July 2022 – May 2026</div>
+                        <h3 class="text-xl font-bold text-white mb-1">BE – Information Technology</h3>
+                        <h4 class="text-gray-300 font-medium mb-3">Vidyavardhini’s College of Engineering and Technology</h4>
+                        <p class="text-gray-400 text-sm">Vasai, Maharashtra</p>
+                        <div class="mt-3 inline-block px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-primary text-sm">
+                            CGPA: 8.5
+                        </div>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="timeline-item right">
+                    <div class="glass-card p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-primary text-sm font-bold mb-2 tracking-wider">June 2021 – Feb 2022</div>
+                        <h3 class="text-xl font-bold text-white mb-1">HSC (12th Grade)</h3>
+                        <h4 class="text-gray-300 font-medium mb-3">Shivshambho Arts and Science College</h4>
+                        <p class="text-gray-400 text-sm">Kanher</p>
+                        <div class="mt-3 inline-block px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-primary text-sm">
+                            Score: 76.50%
+                        </div>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="timeline-item left">
+                    <div class="glass-card p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-primary text-sm font-bold mb-2 tracking-wider">June 2019 – Mar 2020</div>
+                        <h3 class="text-xl font-bold text-white mb-1">SSC (10th Grade)</h3>
+                        <h4 class="text-gray-300 font-medium mb-3">Shriram English School</h4>
+                        <p class="text-gray-400 text-sm">Paniv</p>
+                        <div class="mt-3 inline-block px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-primary text-sm">
+                            Score: 81.00%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section (3D Tilt Cards) -->
+    <section id="projects" class="py-20 relative bg-dark/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Featured <span class="text-primary neon-text">Projects</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                
+                <!-- Project 1 -->
+                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
+                        <!-- Abstract placeholder graphic -->
+                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+                    <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Digital ID Generator</h3>
+                        <p class="text-primary text-xs font-semibold mb-3">Python, HTML, CSS, MongoDB</p>
+                        <ul class="text-gray-400 text-sm mb-6 space-y-2 flex-grow">
+                            <li class="flex gap-2"><span class="text-primary">•</span> <span>Secure OTP-based authentication with real-time QR code generation for student ID verification.</span></li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Python</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">HTML</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">CSS</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">MongoDB</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="https://github.com/kishor047/Digital-ID" target="_blank" class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500 delay-100" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
+                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Gradhub</h3>
+                        <p class="text-primary text-xs font-semibold mb-3">Python, Streamlit, Pandas, CSV/JSON</p>
+                        <ul class="text-gray-400 text-sm mb-6 space-y-2 flex-grow">
+                            <li class="flex gap-2"><span class="text-primary">•</span> <span>Result analysis platform with CSV uploads, automated grading, and personalized student result access.</span></li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Python</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Streamlit</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Pandas</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="https://github.com/kishor047/ScoreAnalysis" target="_blank" class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
+                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    </div>
+                    <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">News Recommendation System</h3>
+                        <p class="text-primary text-xs font-semibold mb-3">Python, Pandas, Scikit-learn, NLP, ML</p>
+                        <ul class="text-gray-400 text-sm mb-6 space-y-2 flex-grow">
+                            <li class="flex gap-2"><span class="text-primary">•</span> <span>Hybrid recommendation system using Content-Based and Collaborative Filtering with TF-IDF and K-Means clustering.</span></li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Python</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Pandas</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Scikit-learn</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">NLP</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="https://github.com/kishor047" target="_blank" class="hover-target text-white bg-white/10 hover:bg-primary px-3 py-2 rounded transition-colors flex items-center justify-center" aria-label="GitHub">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500 delay-100" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
+                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                    </div>
+                    <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Whitefly & CLCUD Detection</h3>
+                        <p class="text-primary text-xs font-semibold mb-3">YOLOv8, CNN, ViT, Deep Learning</p>
+                        <ul class="text-gray-400 text-sm mb-6 space-y-2 flex-grow">
+                            <li class="flex gap-2"><span class="text-primary">•</span> <span>Deep learning system for detecting Whitefly pests and Cotton Leaf Curl Disease using YOLOv8, CNN, and Vision Transformer models.</span></li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">YOLOv8</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">CNN</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">ViT</span>
+                            <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Deep Learning</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="#" class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section id="skills" class="py-20 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Technical <span class="text-primary neon-text">Skills</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Categories -->
+            <div class="space-y-12">
+                
+                <div class="reveal">
+                    <h3 class="text-xl font-medium text-gray-400 mb-6 text-center">Languages</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium hover:border-primary hover:text-primary transition-colors cursor-default">Python</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium hover:border-primary hover:text-primary transition-colors cursor-default">JavaScript</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium hover:border-primary hover:text-primary transition-colors cursor-default">React</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium hover:border-primary hover:text-primary transition-colors cursor-default">Node.js</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium hover:border-primary hover:text-primary transition-colors cursor-default">Django</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium hover:border-primary hover:text-primary transition-colors cursor-default">Flask</div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="reveal">
+                    <h3 class="text-xl font-medium text-gray-400 mb-6 text-center">Web Technologies</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 0.2s;">HTML</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 0.4s;">CSS</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 0.6s;">MongoDB</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 0.8s;">MySQL</div>
+                    </div>
+                </div>
+
+                <div class="reveal">
+                    <h3 class="text-xl font-medium text-gray-400 mb-6 text-center">Tools & Others</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 1s;">Machine Learning</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 1.2s;">Git & GitHub</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 1.4s;">Docker</div>
+                        <div class="glass-card px-6 py-3 rounded-full border border-primary/20 text-white font-medium float-anim hover:border-primary hover:text-primary transition-colors cursor-default" style="animation-delay: 1.6s;">AWS</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative bg-dark/80 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">Get In <span class="text-primary neon-text">Touch</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4">Have a project in mind or want to collaborate? Send me a message.</p>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                            <input type="text" id="name" class="hover-target w-full rounded-lg px-4 py-3" placeholder="Kishor Madane" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input type="email" id="email" class="hover-target w-full rounded-lg px-4 py-3" placeholder="kishormadane4747@gmail.com" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                        <textarea id="message" rows="5" class="hover-target w-full rounded-lg px-4 py-3 resize-none" placeholder="Your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="hover-target btn-primary w-full py-4 rounded-lg font-bold text-lg tracking-wide">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8 border-t border-white/10 relative overflow-hidden">
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-gray-400 text-sm">
+                &copy; <span id="year"></span> Kishor Madane. All rights reserved.
+            </div>
+            <div class="flex gap-4">
+                <a href="https://www.linkedin.com/in/kishor-madane-248139260/" target="_blank" class="hover-target text-gray-500 hover:text-primary transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://github.com/kishor047" target="_blank" class="hover-target text-gray-500 hover:text-primary transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Set Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Sticky Navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-dark/80', 'shadow-lg', 'shadow-primary/5');
+            } else {
+                nav.classList.remove('bg-dark/80', 'shadow-lg', 'shadow-primary/5');
+            }
+        });
+
+        // Typewriter Effect
+        const words = ["Full Stack Developer", "Python Developer", "AI & ML Enthusiast"];
+        let i = 0;
+        let timer;
+        const typewriterEl = document.getElementById('typewriter');
+
+        function typingEffect() {
+            let word = words[i].split("");
+            var loopTyping = function() {
+                if (word.length > 0) {
+                    typewriterEl.innerHTML += word.shift();
+                } else {
+                    setTimeout(deletingEffect, 2000);
+                    return false;
+                }
+                timer = setTimeout(loopTyping, 100);
+            };
+            loopTyping();
+        }
+
+        function deletingEffect() {
+            let word = words[i].split("");
+            var loopDeleting = function() {
+                if (word.length > 0) {
+                    word.pop();
+                    typewriterEl.innerHTML = word.join("");
+                } else {
+                    if (words.length > (i + 1)) {
+                        i++;
+                    } else {
+                        i = 0;
+                    }
+                    setTimeout(typingEffect, 500);
+                    return false;
+                }
+                timer = setTimeout(loopDeleting, 50);
+            };
+            loopDeleting();
+        }
+        typingEffect();
+
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        // Only enable custom cursor on non-touch devices
+        if (window.matchMedia("(pointer: fine)").matches) {
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+                
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+                
+                // Slight delay for outline
+                setTimeout(() => {
+                    cursorOutline.style.left = `${posX}px`;
+                    cursorOutline.style.top = `${posY}px`;
+                }, 50);
+            });
+        } else {
+            document.body.style.cursor = 'auto';
+            cursorDot.style.display = 'none';
+            cursorOutline.style.display = 'none';
+        }
+
+        // Scroll Reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+
+        // Initialize Vanilla Tilt
+        VanillaTilt.init(document.querySelectorAll(".tilt-card"));
+
+        // Background Particle System (Canvas 2D)
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = `rgba(255, 30, 30, ${Math.random() * 0.5})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > width) this.x = 0;
+                if (this.x < 0) this.x = width;
+                if (this.y > height) this.y = 0;
+                if (this.y < 0) this.y = height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            let particleCount = window.innerWidth < 768 ? 40 : 100;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Three.js hero animation removed — CSS 3D computer is displayed instead
+    </script>
+    <!-- Prism.js for client-side syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
+```
