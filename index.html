@@ -443,7 +443,7 @@
                         View Projects
                         <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
-                    <a href="#" class="hover-target btn-outline px-8 py-3 rounded-full font-medium flex items-center gap-2">
+                    <a href="#resume" class="hover-target btn-outline px-8 py-3 rounded-full font-medium flex items-center gap-2">
                         Download Resume
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     </a>
@@ -609,11 +609,10 @@ if __name__ == '__main__':
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
                 
                 <!-- Project 1 -->
-                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
-                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                        <!-- Abstract placeholder graphic -->
-                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                <a href="https://github.com/kishor047/Digital-ID.git" target="_blank" rel="noopener noreferrer" class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500 block cursor-pointer" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden">
+                        <img src="id.png" alt="Digital ID Generator cover" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors z-10"></div>
                     </div>
                     <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
                         <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Digital ID Generator</h3>
@@ -628,18 +627,18 @@ if __name__ == '__main__':
                             <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">MongoDB</span>
                         </div>
                         <div class="flex gap-3">
-                            <a href="https://github.com/kishor047/Digital-ID" target="_blank" class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
+                            <span class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Code
-                            </a>
+                            </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Project 2 -->
-                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500 delay-100" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
-                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <a href="https://github.com/kishor047/ScoreAnalysis.git" target="_blank" rel="noopener noreferrer" class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500 delay-100 block cursor-pointer" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden">
+                        <img src="hub.png" alt="Gradhub cover" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors z-10"></div>
                     </div>
                     <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
                         <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Gradhub</h3>
@@ -653,18 +652,18 @@ if __name__ == '__main__':
                             <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Pandas</span>
                         </div>
                         <div class="flex gap-3">
-                            <a href="https://github.com/kishor047/ScoreAnalysis" target="_blank" class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
+                            <span class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Code
-                            </a>
+                            </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Project 3 -->
                 <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
-                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden">
+                        <img src="news.png" alt="News Recommendation System cover" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors z-10"></div>
                     </div>
                     <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
                         <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">News Recommendation System</h3>
@@ -687,10 +686,10 @@ if __name__ == '__main__':
                 </div>
 
                 <!-- Project 4 -->
-                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500 delay-100" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
-                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                        <svg class="w-20 h-20 text-white/20 group-hover:text-primary/50 transition-colors transform group-hover:scale-110 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                <div class="tilt-card glass-card rounded-2xl overflow-hidden reveal group border-transparent hover:border-primary/50 transition-colors duration-500" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="h-48 bg-gradient-to-r from-[#1a1a1a] to-[#2a0000] relative overflow-hidden">
+                        <img src="cotton.png" alt="Whitefly and CLCUD Detection cover" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors z-10"></div>
                     </div>
                     <div class="p-6 relative z-20 bg-dark/80 backdrop-blur-sm h-full flex flex-col">
                         <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Whitefly & CLCUD Detection</h3>
@@ -705,8 +704,8 @@ if __name__ == '__main__':
                             <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/10">Deep Learning</span>
                         </div>
                         <div class="flex gap-3">
-                            <a href="#" class="hover-target text-sm text-white bg-white/10 hover:bg-primary px-4 py-2 rounded transition-colors flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Code
+                            <a href="https://github.com/kishor047" target="_blank" class="hover-target text-white bg-white/10 hover:bg-primary px-3 py-2 rounded transition-colors flex items-center justify-center" aria-label="GitHub">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                             </a>
                         </div>
                     </div>
@@ -760,6 +759,40 @@ if __name__ == '__main__':
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="py-20 relative bg-dark/50 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-heading font-bold mb-4">My <span class="text-primary neon-text">Resume</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4">Preview my resume below or open the PDF in a new tab.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-8 items-start">
+                <div class="glass-card rounded-2xl p-8 reveal h-full">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Resume Preview</h3>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        This section shows the current resume file from the project folder. Use the buttons below to open or download it.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="Kishor_Resume.pdf" target="_blank" rel="noopener noreferrer" class="hover-target btn-primary text-white px-6 py-3 rounded-full font-medium text-center">
+                            Open Resume
+                        </a>
+                        <a href="Kishor_Resume.pdf" download class="hover-target btn-outline px-6 py-3 rounded-full font-medium text-center">
+                            Download PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-4 md:p-6 reveal">
+                    <div class="rounded-xl overflow-hidden border border-white/10 bg-black/40">
+                        <iframe src="Kishor_Resume.pdf" title="Kishor Madane Resume" class="w-full" style="height: 78vh;"></iframe>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -984,4 +1017,5 @@ if __name__ == '__main__':
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </body>
 </html>
-```
+
+
